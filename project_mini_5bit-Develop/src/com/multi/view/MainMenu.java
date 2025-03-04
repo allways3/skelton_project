@@ -11,33 +11,43 @@ import java.util.Scanner;
 public class MainMenu {
     private Scanner scanner = new Scanner(System.in);
     private MainController mainController = new MainController();
+
     public void menu(){
         while(true){
             try{
-                System.out.println("----------------------------------------");
-                System.out.println("1. 전체목록");
-                System.out.println("2. 권역별 관광지");
-                System.out.println("3. 이름 검색");
-                System.out.println("4. 조회수별 검색");
+                System.out.println("\n-------------------- 관광지 정보 검색 프로그램 --------------------\n");
+                System.out.println("1. 전체목록");       //전상민
+                System.out.println("2. 권역별 관광지");   //김태용
+                System.out.println("3. 이름 검색");      //신유경
+                System.out.println("4. 조회수별 검색");   //최효민
+                System.out.println("0. 프로그램 종료");   //안태희 - DB 연결
+                System.out.println();   
+                System.out.println("검색할 번호를 선택하세요 : ");
+
                 int choice = scanner.nextInt();
                 scanner.nextLine(); //버퍼 제거
+
                 switch(choice){
                     case 1->{
+                        // 전상민
                         // 전체목록 보여주기 8개씩 14개 보여주기, 최 상단에 페이지 번호, 보여줄 목록: 지역, 관광지명,
                         selectPage();
                     }
                     case 2->{
-                        //mainController.showRegionMenu(); //김태용님
+                        // 김태용
+                        //mainController.showRegionMenu();
                         showRegionMenu();
                     }
                     case 3->{
+                        // 신유경
                         mainController.selectByName(inputName());
                     }
                     case 4->{
+                        // 최효민
                         //mainController.selectByCount(); //먼저 전부 가져오는 것으로 테스트*/
                         mainController.selectDistrictByCount();
                     }
-                    case 5->{
+                    case 0->{
                         System.out.println("정말로 끝내시겠습니까??(y/n)");
                         if ('y' == scanner.next().toLowerCase().charAt(0)) {
                             mainController.exitProgram();
@@ -69,34 +79,36 @@ public class MainMenu {
         int currPage = 0;
         boolean isFirst = true;
 
-        mainController.selectPage(currPage,pageSize);
-        System.out.println("--------현재 페이지: "+(currPage+1)+"페이지------------------");
+        mainController.selectPage(currPage, pageSize);
+        System.out.println("-------------------- 현재 페이지: " + (currPage + 1) + "페이지 --------------------");
        while(true){
            if(!isFirst) //처음이 아니라면 실행
-               System.out.println("--------현재 페이지: "+(currPage+1)+"페이지------------------");
+               System.out.println("-------------------- 현재 페이지: " + (currPage + 1) + "페이지 --------------------");
            isFirst = false;
 
-            System.out.println("이전 페이지 p");
-            System.out.println("다음 페이지: n");
-            System.out.println("종료: e");
+           System.out.println("이전 페이지 : 1");
+           System.out.println("다음 페이지 : 2");
+           System.out.println("메뉴 화면으로 돌아가기 : 0");
+           System.out.print("선택: ");
 
-            char key = scanner.next().trim().toLowerCase().charAt(0);
-            if(key =='e')
-                break;
-            else if(key == 'p'){
-                System.out.println("이전페이지");
-                if(currPage==0){
-                    System.out.println("현재 페이지가 첫 페이지 입니다.");
-                }else{
-                    mainController.selectPage(--currPage,pageSize);
-                }
-            }else if(key =='n'){
-                if(mainController.selectPage(++currPage,pageSize)){//true: 현재 페이지가 마지막 페이지임
-                    --currPage;
-                    System.out.println("현재 페이지가 마지막 페이지입니다.");
-                }
-            }else
-                System.out.println("p, n, e중 하나를 입력하세요");
+           char key = scanner.next().trim().toLowerCase().charAt(0);
+           if(key =='0')
+               break;
+           else if(key == '1'){
+               System.out.println("이전 페이지");
+               if(currPage==0){
+                   System.out.println("현재 페이지가 첫 페이지 입니다.");
+               }else{
+                   mainController.selectPage(--currPage,pageSize);
+               }
+           }else if(key =='2'){
+               System.out.println("다음 페이지");
+               if(mainController.selectPage(++currPage,pageSize)){//true: 현재 페이지가 마지막 페이지임
+                   --currPage;
+                   System.out.println("현재 페이지가 마지막 페이지입니다.");
+               }
+           }else
+               System.out.println("1, 2, 0중 하나를 입력하세요.");
         }
 
         scanner.nextLine(); //버퍼 비우기
@@ -105,15 +117,16 @@ public class MainMenu {
 
     private void showRegionMenu() {
         while (true) {
-            System.out.println("\n==== 권역별 관광지 목록 ====");
+            System.out.println("\n----------------------- 권역별 관광지 목록 -----------------------");
             System.out.println("1. 수도권");
             System.out.println("2. 강원권");
             System.out.println("3. 충청권");
             System.out.println("4. 전라권");
             System.out.println("5. 경상권");
             System.out.println("6. 제주권");
-            System.out.println("0. 이전 메뉴로 돌아가기");
-            System.out.print("원하시는 권역을 선택하세요: ");
+            System.out.println("0. 메뉴 화면으로 돌아가기");
+            System.out.println();
+            System.out.print("검색할 권역을 선택하세요. : ");
 
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
@@ -127,7 +140,7 @@ public class MainMenu {
                 if (region != null) {
                     mainController.showAttractionsByRegion(region);
                 } else {
-                    System.out.println("잘못된 선택입니다. 다시 선택해주세요.");
+                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("숫자를 입력해주세요.");
@@ -157,7 +170,9 @@ public class MainMenu {
     // ↓↓↓↓↓ controller에서 호출하는 함수
 
     public void displayNoData() {
+        System.out.println();
         System.out.println("조회된 결과가 없습니다.");
+        System.out.println();
     }
     public void displayMemberList(ArrayList<Travel> list) {
         System.out.println("\n조회된 관광지의 정보는 다음과 같습니다.");
@@ -172,7 +187,7 @@ public class MainMenu {
 
     public String displayselectDistrictByCount(String message, ArrayList<Travel> list) { //예외처리 아직 안함
         System.out.println("success"+message);
-        System.out.println("-------------지역별 우선순위----------------");
+        System.out.println("-------------------- 지역별 우선순위 -------------------- ");
         for(int i=0;i<list.size();i++){
             String s = new StringBuilder()
                     .append(i+1+"순위 지역: ")
@@ -182,7 +197,7 @@ public class MainMenu {
                     .toString();
             System.out.println(s);
         }
-        System.out.print("해당 지역의 인기 관광지를 보고 싶으면 순위를 입력해주세요(이전 화면:-1) ");
+        System.out.print("해당 지역의 인기 관광지를 보고 싶으면 순위를 입력해주세요(이전 화면:-1) : ");
         int num = scanner.nextInt();
 
         if (num==-1)
@@ -192,21 +207,26 @@ public class MainMenu {
     }
 
     public void displayHome(){
-        System.out.println("초기화면으로 돌아갑니다.");
+        System.out.println();
+        System.out.println("메뉴 화면으로 돌아갑니다.");
+        System.out.println();
     }
 
     public void displayError() {
-        System.out.println("조회 결과 없음");
+        System.out.println();
+        System.out.println("조회된 결과가 없습니다.");
+        System.out.println();
     }
     public void displayError(String message) {
+        System.out.println();
         System.out.println("서비스 요청 처리 실패 : "+message);
+        System.out.println();
     }
 
     public void displayselectTouristAttByCount(String message, ArrayList<Travel> list, String district) {
         System.out.println("success"+message);
-        System.out.println("----------------"+district+"지역 --------------------");
-        System.out.println("---------------"+"인기 관광지 목록"+"-----------------");
-        System.out.println("-------------"+"TOP 5"+"---------------------------");
+        System.out.println("\n-------------------- "+district+" 인기 관광지 목록 -------------------- ");
+        System.out.println("--------------------------- "+"TOP 5"+" --------------------------- ");
         for(int i=0;i<list.size();i++){
             String s = new StringBuilder()
                     .append(i+1+". 관광지명: ")
@@ -227,7 +247,9 @@ public class MainMenu {
     }
 
     public void displaySuccess(String message) {
+        System.out.println();
         System.out.println("success"+message);
+        System.out.println();
     }
 
     public void displayAll(ArrayList<Travel> list) {
@@ -237,6 +259,8 @@ public class MainMenu {
     }
 
     public void displayMessage(String message){
+        System.out.println();
         System.out.println(message);
+        System.out.println();
     }
 }

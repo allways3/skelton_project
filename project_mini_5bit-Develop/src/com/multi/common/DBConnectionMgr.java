@@ -31,8 +31,8 @@ public class DBConnectionMgr {
     private Vector connections = new Vector(10); //Connection 10
     private String _driver = "com.mysql.cj.jdbc.Driver",
     _url = "jdbc:mysql://localhost:3306/travel_db",//project_mini
-    _user = "chm",
-    _password = "0000";
+    _user = "root",
+    _password = "mysql";
     private boolean _traceOn = false;
     private boolean initialized = false;
     private int _openConnections = 10;
